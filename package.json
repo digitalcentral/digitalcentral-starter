@@ -7,6 +7,7 @@
 		"pup": "pnpm update --recursive && pnpm install && pnpm build",
 		"dev": "turbo run dev",
 		"build": "turbo run build",
+		"clean": "turbo run clean && git clean -xdf node_modules && rm -rf .turbo",
 		"release": "turbo run release",
 		"check": "biome check .",
 		"check:write": "biome check --write .",

@@ -1,7 +1,7 @@
 import { convexBetterAuthNextJs } from "@convex-dev/better-auth/nextjs";
+import { api } from "@digitalcentral/backend/convex/_generated/api";
 import { cache } from "react";
 import { env } from "@/env";
-import { api } from "@digitalcentral/backend/convex/_generated/api";
 
 export const { handler, preloadAuthQuery, isAuthenticated, getToken, fetchAuthQuery, fetchAuthMutation, fetchAuthAction } = convexBetterAuthNextJs({
 	convexUrl: env.NEXT_PUBLIC_CONVEX_URL,

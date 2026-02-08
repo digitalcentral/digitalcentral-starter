@@ -4,18 +4,15 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "pnpm with-env convex dev",
-		"release": "pnpm with-env convex deploy -y",
-		"auth:generate": "pnpm dlx @better-auth/cli generate --config ./convex/betterAuth/auth.ts --output ./convex/betterAuth/GeneratedSchema.ts",
-		"with-env": "dotenv -e ../../.env.local --"
+		"dev": "convex dev",
+		"clean": "rm -rf .next .turbo .cache node_modules dist _generated",
+		"release": "convex deploy -y",
+		"auth:generate": "pnpm dlx @better-auth/cli generate --config ./convex/betterAuth/auth.ts --output ./convex/betterAuth/GeneratedSchema.ts"
 	},
 	"dependencies": {
 		"@convex-dev/better-auth": "^0.10.10",
 		"better-auth": "^1.4.18",
 		"convex": "^1.31.7"
-	},
-	"devDependencies": {
-		"dotenv-cli": "^10.0.0"
 	},
 	"exports": {
 		"./convex/_generated/api": {

@@ -9,7 +9,7 @@ A **project starter** for building SaaS apps with authentication, organizations,
 - **Organizations**: Create orgs, invite members, assign roles (admin/member)
 - **Subscriptions**: Trial period, subscription status, and a placeholder flow you can connect to Stripe, Paddle, or another provider
 - **UI**: [shadcn/ui](https://ui.shadcn.com/) (Radix), Tailwind CSS 4, dark/light theme
-- **Real-time**: [Convex](https://convex.dev) for database and server functions
+- **Real-time**: [Convex](https://convex.dev/referral/DIGITA6401) for database and server functions
 
 ## Tech stack
 
@@ -25,7 +25,7 @@ A **project starter** for building SaaS apps with authentication, organizations,
 
 - **Node.js** 18+
 - **pnpm** 10+
-- A [Convex](https://convex.dev) account (free tier is enough)
+- A [Convex](https://convex.dev/referral/DIGITA6401) account (free tier is enough)
 
 ## Getting started
 
@@ -39,31 +39,33 @@ pnpm install
 
 ### 2. Environment variables
 
-Copy the example env and configure it for the **web** app (it runs from `apps/web` when you use Turborepo):
+Copy the example env to the **repo root**. Both the web app and the backend read from this single file:
 
 ```bash
-cp .env.example apps/web/.env.local
+cp .env.example .env.local
 ```
 
-Edit `apps/web/.env.local` and set:
+Edit `.env.local` (in the root) and set:
 
-- **Convex**: Create a project at [dashboard.convex.dev](https://dashboard.convex.dev), then set `NEXT_PUBLIC_CONVEX_URL` and `NEXT_PUBLIC_CONVEX_SITE_URL` (and `CONVEX_SITE_URL` to the same value as `NEXT_PUBLIC_CONVEX_SITE_URL`).
+- **Convex**: Create a project at [dashboard.convex.dev](https://dashboard.convex.dev), then set `NEXT_PUBLIC_CONVEX_URL` and `NEXT_PUBLIC_CONVEX_SITE_URL`.
 - **Better Auth**: Set `BETTER_AUTH_SECRET` (e.g. `openssl rand -base64 32`). For Google sign-in, add `BETTER_AUTH_GOOGLE_CLIENT_ID` and `BETTER_AUTH_GOOGLE_CLIENT_SECRET`.
 - **URLs**: `BETTER_AUTH_URL` and `NEXT_PUBLIC_SITE_URL` to your app URL (e.g. `http://localhost:3000` for local dev).
+
+**Don’t forget:** Set the same variables in your [Convex project](https://dashboard.convex.dev) (Settings → Environment Variables) so the backend can use them when running.
 
 ### 3. Run Convex (first time)
 
 From the repo root, push your Convex schema and start the backend dev server:
 
 ```bash
-cd apps/backend && pnpm exec convex dev
+pnpm -F backend dev
 ```
 
-Follow the prompts to log in and create/link a Convex project. Once it’s running, you can stop it and use the root `pnpm dev` in the next step (Turborepo will run both web and backend).
+Follow the prompts to log in and create/link a Convex project. Once it’s running, you can stop it and use `pnpm dev` in the next step (Turborepo will run both web and backend).
 
 ### 4. Start development
 
-From the **repo root**:
+From the repo root:
 
 ```bash
 pnpm dev
@@ -128,13 +130,12 @@ Landing, pricing, and paywall copy pull from these constants so one place drives
 | `pnpm check` | Run Biome linter |
 | `pnpm check:write` | Biome format and safe fixes |
 
-From `apps/web`: `pnpm start` runs the production Next.js server.  
-From `apps/backend`: `pnpm dev` runs Convex dev; `pnpm release` deploys Convex to production.
+From the repo root: `pnpm --filter @digitalcentral/web start` runs the production Next.js server; `pnpm --filter @digitalcentral/backend dev` runs Convex dev; `pnpm release` deploys Convex to production.
 
 ## Deployment
 
-- **Next.js**: Deploy `apps/web` to Vercel, Netlify, or any Node host. Set the same env vars as in `.env.local` (and point URLs to your production domain).
-- **Convex**: Run `pnpm release` from `apps/backend` (or `turbo run release` from root) to deploy Convex. Configure production env in the Convex dashboard if needed.
+- **Next.js**: Deploy `apps/web` to Vercel, Netlify, or any Node host. Set the same env vars as in the root `.env.local` (and point URLs to your production domain).
+- **Convex**: Run `pnpm release` from the repo root to deploy Convex. Don’t forget to set environment variables in the [Convex dashboard](https://dashboard.convex.dev) (Settings → Environment Variables) for your project.
 
 ## License
 
