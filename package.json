@@ -1,0 +1,20 @@
+{
+	"name": "digitalcentral-starter",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"pup": "pnpm update --recursive && pnpm install && pnpm build",
+		"dev": "turbo run dev",
+		"build": "turbo run build",
+		"release": "turbo run release",
+		"check": "biome check .",
+		"check:write": "biome check --write .",
+		"typecheck": "turbo run typecheck"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.3.14",
+		"turbo": "^2.8.3"
+	},
+	"packageManager": "pnpm@10.28.2"
+}

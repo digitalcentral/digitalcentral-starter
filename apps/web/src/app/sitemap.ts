@@ -1,0 +1,15 @@
+import type { MetadataRoute } from "next";
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+	const baseUrl = "https://payroll.central.sc";
+
+	// Static routes
+	const staticRoutes = [""].map((route) => ({
+		url: `${baseUrl}${route}`,
+		lastModified: new Date(),
+		changeFrequency: "daily" as const,
+		priority: route === "" ? 1 : 0.8,
+	}));
+
+	return [...staticRoutes];
+}
