@@ -7,7 +7,7 @@ A **project starter** for building SaaS apps with authentication, organizations,
 - **Turborepo monorepo**: `apps/web` (Next.js) and `apps/backend` (Convex)
 - **Auth**: [Better Auth](https://www.better-auth.com/) with Convex plugin — Google OAuth and email
 - **Organizations**: Create orgs, invite members, assign roles (admin/member)
-- **Subscriptions**: Trial period, subscription status, and a placeholder flow you can connect to Stripe, Paddle, or another provider
+- **Subscriptions & payments**: [Polar](https://polar.sh) via [Better Auth Polar plugin](https://www.better-auth.com/docs/plugins/polar) — checkout, customer portal, and organization-scoped subscriptions (no Convex sync)
 - **UI**: [shadcn/ui](https://ui.shadcn.com/) (Radix), Tailwind CSS 4, dark/light theme
 - **Real-time**: [Convex](https://convex.dev/referral/DIGITA6401) for database and server functions
 
@@ -50,6 +50,7 @@ Edit `.env.local` (in the root) and set:
 - **Convex**: Create a project at [dashboard.convex.dev](https://dashboard.convex.dev), then set `NEXT_PUBLIC_CONVEX_URL` and `NEXT_PUBLIC_CONVEX_SITE_URL`.
 - **Better Auth**: Set `BETTER_AUTH_SECRET` (e.g. `openssl rand -base64 32`). For Google sign-in, add `BETTER_AUTH_GOOGLE_CLIENT_ID` and `BETTER_AUTH_GOOGLE_CLIENT_SECRET`.
 - **URLs**: `BETTER_AUTH_URL` and `NEXT_PUBLIC_SITE_URL` to your app URL (e.g. `http://localhost:3000` for local dev).
+- **Polar** (payments): See [Payments & subscriptions](#payments--subscriptions) below.
 
 **Don’t forget:** Set the same variables in your [Convex project](https://dashboard.convex.dev) (Settings → Environment Variables) so the backend can use them when running.
 
@@ -77,6 +78,38 @@ This starts:
 - **Convex** backend dev
 
 Sign in with Google (or email if configured), create an organization, and you’re in the app.
+
+## Payments & subscriptions
+
+Payments are handled by [Polar](https://polar.sh) via the [Better Auth Polar plugin](https://www.better-auth.com/docs/plugins/polar). No subscription state is synced to Convex; the app uses the **portal plugin** to list subscriptions per organization (with `referenceId`).
+
+### What’s configured
+
+- **Checkout**: Products and slugs are set in `apps/backend/convex/auth.ts` (Polar plugin `checkout()`). The subscription page starts checkout with `authClient.checkout({ slug, referenceId: organizationId })`.
+- **Customer portal**: Users manage billing and subscriptions via `authClient.customer.portal()` (Polar Customer Portal).
+- **Organization support**: Subscriptions are tied to the active organization by passing `referenceId: organizationId` at checkout. Access is determined by calling `authClient.customer.subscriptions.list({ query: { active: true, referenceId: organizationId } })` (see `usePolarSubscriptions` in `apps/web/src/hooks/use-organization.ts`).
+- **Trial**: A 7-day trial is stored in Convex (`subscriptions` table). After trial, the user must have an active Polar subscription for the org to keep access.
+
+### Environment variables (Polar)
+
+In `.env.local` and in [Convex Environment Variables](https://dashboard.convex.dev):
+
+| Variable | Description |
+|----------|-------------|
+| `POLAR_ACCESS_TOKEN` | Polar organization access token ([Polar dashboard](https://polar.sh) → Organization settings) |
+| `POLAR_PRODUCT_ID_PRO_MONTHLY` | Product ID for the monthly plan (used in auth checkout config) |
+| `POLAR_PRODUCT_ID_PRO_YEARLY` | Product ID for the yearly plan |
+| `POLAR_SERVER` | `sandbox` or `production` (sandbox for testing) |
+
+### Polar setup
+
+1. Create a [Polar](https://polar.sh) account and organization.
+2. Create products (e.g. “Pro Monthly”, “Pro Yearly”) in the Polar dashboard.
+3. Generate an **Organization access token** and set `POLAR_ACCESS_TOKEN`.
+4. Put the product IDs into `POLAR_PRODUCT_ID_PRO_MONTHLY` and `POLAR_PRODUCT_ID_PRO_YEARLY` and into the checkout config in `apps/backend/convex/auth.ts` (and in Convex env if you read them from env there).
+5. Use **sandbox** while developing; switch to **production** and production product IDs when going live.
+
+The subscription page shows trial status from Convex and active paid status from the Polar portal (per organization). No webhooks or Convex sync are required.
 
 ## Project structure
 
@@ -118,7 +151,7 @@ Landing, pricing, and paywall copy pull from these constants so one place drives
 
 - **New Convex logic**: Add files under `apps/backend/convex/` and call them from the web app via `@digitalcentral/backend/convex/_generated/api`.
 - **New pages**: Add routes under `apps/web/src/app/` and, if needed, new items in `apps/web/src/components/layout/sidebar-nav.tsx`.
-- **Payments**: The subscription flow is ready for you to plug in your provider (e.g. Stripe) in Convex and in the subscription page/API.
+- **Payments**: Checkout and portal are implemented with Polar (Better Auth plugin). To add more plans or change products, edit the Polar plugin config in `apps/backend/convex/auth.ts` and the subscription page in `apps/web/src/app/(authed)/subscription/page.tsx`.
 
 ## Scripts
 

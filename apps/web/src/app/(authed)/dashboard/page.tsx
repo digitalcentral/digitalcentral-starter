@@ -1,11 +1,11 @@
 "use client";
 
+import { api } from "@digitalcentral/backend/convex/_generated/api";
+import { useQuery } from "convex/react";
 import { AlertCircle, ArrowRight, Building2, CreditCard, Users } from "lucide-react";
 import Link from "next/link";
-import { useQuery } from "convex/react";
-import { api } from "@digitalcentral/backend/convex/_generated/api";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useOrganization, useSubscription } from "@/hooks/use-organization";
 import { authClient } from "@/lib/auth-client";
 
@@ -14,10 +14,7 @@ export default function DashboardPage() {
 	const { organizationId, isLoading: isOrgLoading } = useOrganization();
 	const { subscription, isLoading: isSubscriptionLoading } = useSubscription();
 
-	const organization = useQuery(
-		api.organizations.getById,
-		organizationId ? { organizationId } : "skip",
-	);
+	const organization = useQuery(api.organizations.getById, organizationId ? { organizationId } : "skip");
 
 	const isStillLoading = isOrgLoading || isSubscriptionLoading;
 
@@ -27,9 +24,7 @@ export default function DashboardPage() {
 			<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 				<div>
 					<h1 className="font-bold text-2xl tracking-tight lg:text-3xl">Dashboard</h1>
-					<p className="text-muted-foreground">
-						Welcome back{session?.user?.name ? `, ${session.user.name}` : ""}!
-					</p>
+					<p className="text-muted-foreground">Welcome back{session?.user?.name ? `, ${session.user.name}` : ""}!</p>
 				</div>
 				<Button asChild variant="outline">
 					<Link href="/settings">
@@ -46,12 +41,8 @@ export default function DashboardPage() {
 						<div className="flex items-center gap-3">
 							<CreditCard className="size-5 text-yellow-600 dark:text-yellow-400" />
 							<div>
-								<p className="font-medium text-yellow-800 dark:text-yellow-200">
-									Trial Period - {subscription?.trialDaysRemaining} days remaining
-								</p>
-								<p className="text-sm text-yellow-700 dark:text-yellow-300">
-									Subscribe to continue after your trial ends.
-								</p>
+								<p className="font-medium text-yellow-800 dark:text-yellow-200">Trial Period - {Number(subscription?.trialDaysRemaining ?? 0)} days remaining</p>
+								<p className="text-sm text-yellow-700 dark:text-yellow-300">Subscribe to continue after your trial ends.</p>
 							</div>
 						</div>
 						<Button asChild className="shrink-0" size="sm" variant="outline">
@@ -68,9 +59,7 @@ export default function DashboardPage() {
 						<AlertCircle className="size-5 text-red-600 dark:text-red-400" />
 						<div>
 							<p className="font-medium text-red-800 dark:text-red-200">No organization found</p>
-							<p className="text-red-700 text-sm dark:text-red-300">
-								Please complete your onboarding to create an organization.
-							</p>
+							<p className="text-red-700 text-sm dark:text-red-300">Please complete your onboarding to create an organization.</p>
 						</div>
 						<Button asChild className="ml-auto shrink-0" size="sm" variant="outline">
 							<Link href="/onboarding">Complete Setup</Link>
@@ -90,9 +79,7 @@ export default function DashboardPage() {
 						{organization ? (
 							<>
 								<div className="font-bold text-2xl">{organization.name}</div>
-								<p className="text-muted-foreground text-xs">
-									{organization.slug || "—"}
-								</p>
+								<p className="text-muted-foreground text-xs">{organization.slug || "—"}</p>
 							</>
 						) : (
 							<p className="text-muted-foreground text-sm">Loading…</p>
@@ -112,12 +99,8 @@ export default function DashboardPage() {
 						<Users className="size-4 text-muted-foreground" />
 					</CardHeader>
 					<CardContent>
-						<div className="font-bold text-2xl capitalize">
-							{subscription?.status ?? "—"}
-						</div>
-						<p className="text-muted-foreground text-xs">
-							{subscription?.billingPeriod ?? "No plan"}
-						</p>
+						<div className="font-bold text-2xl capitalize">{String(subscription?.status ?? "—")}</div>
+						<p className="text-muted-foreground text-xs">{String(subscription?.billingPeriod ?? "No plan")}</p>
 						<Button asChild className="mt-3" size="sm" variant="outline">
 							<Link href="/subscription">
 								View plan

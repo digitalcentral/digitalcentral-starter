@@ -1,15 +1,6 @@
 "use client";
 
-import {
-	ArrowRight,
-	Box,
-	Building2,
-	CreditCard,
-	Layout,
-	Shield,
-	Star,
-	Zap,
-} from "lucide-react";
+import { ArrowRight, Box, Building2, CreditCard, Layout, Shield, Star, Zap } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -31,8 +22,6 @@ export default function HomePage() {
 	const { data: session, isPending } = authClient.useSession();
 
 	const price = billingPeriod === "monthly" ? PLAN_PRICES.monthly : PLAN_PRICES.yearly;
-	const yearlyTotal = PLAN_PRICES.yearly * 12;
-	const monthlySavings = (PLAN_PRICES.monthly * 12 - yearlyTotal).toFixed(0);
 
 	return (
 		<div className="flex min-h-screen flex-col">
@@ -88,14 +77,9 @@ export default function HomePage() {
 								<span>Auth, orgs & subscriptions included</span>
 							</div>
 							<h1 className="mb-6 font-bold text-4xl tracking-tight md:text-6xl lg:text-7xl">
-								Build your product on a{" "}
-								<span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-									solid foundation
-								</span>
+								Build your product on a <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">solid foundation</span>
 							</h1>
-							<p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground md:text-xl">
-								Next.js, Convex, Better Auth, organizations, and subscriptions. Customize the branding and add your features.
-							</p>
+							<p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground md:text-xl">Next.js, Convex, Better Auth, organizations, and subscriptions. Customize the branding and add your features.</p>
 							<div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
 								<Button asChild className="w-full sm:w-auto" size="lg">
 									<Link href="/sign-in">
@@ -145,9 +129,7 @@ export default function HomePage() {
 								return (
 									<Card className="relative overflow-hidden" key={feature.title}>
 										<CardHeader>
-											<div className="mb-4 flex size-12 items-center justify-center rounded-lg bg-primary/10">
-												{Icon && <Icon className="size-6 text-primary" />}
-											</div>
+											<div className="mb-4 flex size-12 items-center justify-center rounded-lg bg-primary/10">{Icon && <Icon className="size-6 text-primary" />}</div>
 											<CardTitle className="text-xl">{feature.title}</CardTitle>
 										</CardHeader>
 										<CardContent>
@@ -170,9 +152,7 @@ export default function HomePage() {
 						<div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-3">
 							{HOW_IT_WORKS.map((step) => (
 								<div className="relative text-center" key={step.step}>
-									<div className="mx-auto mb-6 flex size-16 items-center justify-center rounded-full bg-primary font-bold text-2xl text-primary-foreground">
-										{step.step}
-									</div>
+									<div className="mx-auto mb-6 flex size-16 items-center justify-center rounded-full bg-primary font-bold text-2xl text-primary-foreground">{step.step}</div>
 									<h3 className="mb-2 font-semibold text-xl">{step.title}</h3>
 									<p className="text-muted-foreground">{step.description}</p>
 								</div>
@@ -190,30 +170,18 @@ export default function HomePage() {
 						</div>
 
 						<div className="mb-12 flex items-center justify-center gap-4">
-							<button
-								className={`rounded-lg px-4 py-2 font-medium text-sm transition-colors ${billingPeriod === "monthly" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
-								onClick={() => setBillingPeriod("monthly")}
-								type="button"
-							>
+							<button className={`rounded-lg px-4 py-2 font-medium text-sm transition-colors ${billingPeriod === "monthly" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`} onClick={() => setBillingPeriod("monthly")} type="button">
 								Monthly
 							</button>
-							<button
-								className={`rounded-lg px-4 py-2 font-medium text-sm transition-colors ${billingPeriod === "yearly" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
-								onClick={() => setBillingPeriod("yearly")}
-								type="button"
-							>
+							<button className={`rounded-lg px-4 py-2 font-medium text-sm transition-colors ${billingPeriod === "yearly" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`} onClick={() => setBillingPeriod("yearly")} type="button">
 								Yearly
-								<span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-green-700 text-xs dark:bg-green-900 dark:text-green-300">
-									Save ${monthlySavings}
-								</span>
+								<span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-green-700 text-xs dark:bg-green-900 dark:text-green-300">2 months FREE</span>
 							</button>
 						</div>
 
 						<div className="mx-auto max-w-md">
 							<Card className="relative overflow-hidden border-2 border-primary">
-								<div className="absolute top-0 right-0 rounded-bl-lg bg-primary px-3 py-1 font-medium text-primary-foreground text-xs">
-									7-Day Free Trial
-								</div>
+								<div className="absolute top-0 right-0 rounded-bl-lg bg-primary px-3 py-1 font-medium text-primary-foreground text-xs">7-Day Free Trial</div>
 								<CardHeader className="pt-8 text-center">
 									<CardTitle className="text-2xl">Pro</CardTitle>
 									<CardDescription>Everything you need to run your product</CardDescription>
@@ -221,10 +189,7 @@ export default function HomePage() {
 								<CardContent className="text-center">
 									<div className="mb-6">
 										<span className="font-bold text-5xl">${price}</span>
-										<span className="text-muted-foreground">/month</span>
-										{billingPeriod === "yearly" && (
-											<p className="mt-1 text-muted-foreground text-sm">Billed annually</p>
-										)}
+										{billingPeriod === "yearly" && <p className="mt-1 text-muted-foreground text-sm">Billed annually</p>}
 									</div>
 									<ul className="mb-8 space-y-3 text-left">
 										<li className="flex items-center gap-2">

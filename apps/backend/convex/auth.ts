@@ -1,5 +1,7 @@
 import { createClient, type GenericCtx } from "@convex-dev/better-auth";
 import { convex } from "@convex-dev/better-auth/plugins";
+import { checkout, polar, portal } from "@polar-sh/better-auth";
+import { Polar } from "@polar-sh/sdk";
 import { type BetterAuthOptions, betterAuth } from "better-auth/minimal";
 import { admin, organization, username } from "better-auth/plugins";
 import { v } from "convex/values";
@@ -9,7 +11,15 @@ import { mutation, query } from "./_generated/server";
 import authConfig from "./auth.config";
 import authSchema from "./betterAuth/schema";
 
+// Fallback so Polar portal plugin never sees Invalid URL during Convex push/analyze (env may be unset at bundle time)
 const siteUrl = process.env.BETTER_AUTH_URL;
+const polarToken = process.env.POLAR_ACCESS_TOKEN;
+const polarServer = process.env.POLAR_SERVER;
+
+const polarClient = new Polar({
+	accessToken: polarToken,
+	server: polarServer as "sandbox" | "production",
+});
 
 // Create authComponent first (needed by createAuthOptions)
 export const authComponent = createClient<DataModel, typeof authSchema>(components.betterAuth, {
@@ -30,6 +40,31 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
 			admin(),
 			organization(),
 			username(),
+			// Polar: checkout + portal (see https://www.better-auth.com/docs/plugins/polar)
+			polar({
+				client: polarClient,
+				createCustomerOnSignUp: true,
+				use: [
+					checkout({
+						products: [
+							{
+								productId: process.env.POLAR_PRODUCT_ID_PRO_MONTHLY ?? "",
+								slug: "pro-monthly",
+							},
+							{
+								productId: process.env.POLAR_PRODUCT_ID_PRO_YEARLY ?? "",
+								slug: "pro-yearly",
+							},
+						],
+						successUrl: `${siteUrl}/subscription?success=1`,
+						returnUrl: `${siteUrl}/subscription`,
+						authenticatedUsersOnly: true,
+					}),
+					portal({
+						returnUrl: `${siteUrl}/subscription`,
+					}),
+				],
+			}),
 		],
 		socialProviders: {
 			google: {

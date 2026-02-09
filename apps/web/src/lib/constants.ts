@@ -4,15 +4,23 @@
 
 import { env } from "@/env";
 
-// Subscription pricing (USD) — adjust for your product
+// Subscription pricing (USD) — Polar sandbox products
 export const PLAN_PRICES = {
-	monthly: 29,
-	yearly: 24, // Per month when paid yearly ($288/year)
+	monthly: 5,
+	yearly: 50, // Per year (2000 credits/month)
+	credits: 25, // One-time 5000 credits
+} as const;
+
+export const PLAN_CREDITS = {
+	monthly: 1000,
+	yearly: 2000,
+	credits: 5000,
 } as const;
 
 export const PLAN_DESCRIPTIONS = {
-	monthly: "Full access, billed monthly",
-	yearly: "Full access, save 20% with annual billing",
+	monthly: "1000 credits/month, billed monthly",
+	yearly: "2000 credits/month, billed annually",
+	credits: "5000 credits one-time add-on",
 } as const;
 
 export type BillingPeriod = "monthly" | "yearly";

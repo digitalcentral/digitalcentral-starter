@@ -6,15 +6,14 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
-import { APP_NAME, PLAN_PRICES } from "@/lib/constants";
+import { APP_NAME, PLAN_CREDITS, PLAN_PRICES } from "@/lib/constants";
 
 export default function PricingPage() {
 	const [billingPeriod, setBillingPeriod] = useState<"monthly" | "yearly">("monthly");
 	const { data: session } = authClient.useSession();
 
 	const price = billingPeriod === "monthly" ? PLAN_PRICES.monthly : PLAN_PRICES.yearly;
-	const yearlyTotal = PLAN_PRICES.yearly * 12;
-	const monthlySavings = (PLAN_PRICES.monthly * 12 - yearlyTotal).toFixed(0);
+	const credits = billingPeriod === "monthly" ? PLAN_CREDITS.monthly : PLAN_CREDITS.yearly;
 
 	return (
 		<div className="min-h-screen bg-background">
@@ -60,43 +59,31 @@ export default function PricingPage() {
 					</div>
 
 					<div className="mb-12 flex items-center justify-center gap-4">
-						<button
-							className={`rounded-lg px-4 py-2 font-medium text-sm transition-colors ${billingPeriod === "monthly" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
-							onClick={() => setBillingPeriod("monthly")}
-							type="button"
-						>
+						<button className={`rounded-lg px-4 py-2 font-medium text-sm transition-colors ${billingPeriod === "monthly" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`} onClick={() => setBillingPeriod("monthly")} type="button">
 							Monthly
 						</button>
-						<button
-							className={`rounded-lg px-4 py-2 font-medium text-sm transition-colors ${billingPeriod === "yearly" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
-							onClick={() => setBillingPeriod("yearly")}
-							type="button"
-						>
+						<button className={`rounded-lg px-4 py-2 font-medium text-sm transition-colors ${billingPeriod === "yearly" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`} onClick={() => setBillingPeriod("yearly")} type="button">
 							Yearly
-							<span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-green-700 text-xs dark:bg-green-900 dark:text-green-300">
-								Save ${monthlySavings}
-							</span>
 						</button>
 					</div>
 
 					<div className="mx-auto max-w-md">
 						<Card className="relative overflow-hidden border-2 border-primary">
-							<div className="absolute top-0 right-0 rounded-bl-lg bg-primary px-3 py-1 font-medium text-primary-foreground text-xs">
-								7-Day Free Trial
-							</div>
+							<div className="absolute top-0 right-0 rounded-bl-lg bg-primary px-3 py-1 font-medium text-primary-foreground text-xs">7-Day Free Trial</div>
 							<CardHeader className="pt-8 text-center">
 								<CardTitle className="text-2xl">Pro</CardTitle>
-								<CardDescription>Everything you need to run your product</CardDescription>
+								<CardDescription>{credits} credits per month included</CardDescription>
 							</CardHeader>
 							<CardContent className="text-center">
 								<div className="mb-6">
 									<span className="font-bold text-5xl">${price}</span>
-									<span className="text-muted-foreground">/month</span>
-									{billingPeriod === "yearly" && (
-										<p className="mt-1 text-muted-foreground text-sm">Billed annually (${yearlyTotal}/year)</p>
-									)}
+									<span className="text-muted-foreground">{billingPeriod === "monthly" ? "/month" : "/year"}</span>
 								</div>
 								<ul className="mb-8 space-y-3 text-left">
+									<li className="flex items-center gap-2">
+										<CheckCircle2 className="size-5 text-green-500" />
+										<span>{credits} credits per month</span>
+									</li>
 									<li className="flex items-center gap-2">
 										<CheckCircle2 className="size-5 text-green-500" />
 										<span>Unlimited organizations</span>
@@ -107,11 +94,7 @@ export default function PricingPage() {
 									</li>
 									<li className="flex items-center gap-2">
 										<CheckCircle2 className="size-5 text-green-500" />
-										<span>Real-time data</span>
-									</li>
-									<li className="flex items-center gap-2">
-										<CheckCircle2 className="size-5 text-green-500" />
-										<span>Email support</span>
+										<span>Payments via Polar</span>
 									</li>
 								</ul>
 								<Button asChild className="w-full" size="lg">
@@ -127,21 +110,15 @@ export default function PricingPage() {
 						<div className="space-y-6">
 							<div>
 								<h3 className="mb-2 font-semibold">What happens after my trial ends?</h3>
-								<p className="text-muted-foreground">
-									After your 7-day trial, you can subscribe to continue. Your data is preserved.
-								</p>
+								<p className="text-muted-foreground">After your 7-day trial, you can subscribe to continue. Your data is preserved.</p>
 							</div>
 							<div>
 								<h3 className="mb-2 font-semibold">How do I pay?</h3>
-								<p className="text-muted-foreground">
-									The starter includes a subscription flow. Wire up your preferred payment provider (Stripe, Paddle, etc.) in the backend.
-								</p>
+								<p className="text-muted-foreground">Checkout is powered by Polar. You’ll be redirected to Polar to pay; your plan updates automatically via webhook.</p>
 							</div>
 							<div>
 								<h3 className="mb-2 font-semibold">Can I cancel anytime?</h3>
-								<p className="text-muted-foreground">
-									Yes. You keep access until the end of your billing period.
-								</p>
+								<p className="text-muted-foreground">Yes. You keep access until the end of your billing period.</p>
 							</div>
 						</div>
 					</div>
