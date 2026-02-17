@@ -10,9 +10,6 @@
 
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
-import type * as organizations from "../organizations.js";
-import type * as payments from "../payments.js";
-import type * as subscriptions from "../subscriptions.js";
 
 import type {
   ApiFromModules,
@@ -23,9 +20,6 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   http: typeof http;
-  organizations: typeof organizations;
-  payments: typeof payments;
-  subscriptions: typeof subscriptions;
 }>;
 
 /**

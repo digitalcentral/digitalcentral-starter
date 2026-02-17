@@ -47,8 +47,8 @@ export function SignUpForm() {
 				return;
 			}
 
-			toast.success("Account created! Let's set up your organization.");
-			router.push("/onboarding");
+			toast.success("Account created successfully!");
+			router.push("/dashboard");
 		} catch (error) {
 			console.error(error);
 			toast.error("An unexpected error occurred");

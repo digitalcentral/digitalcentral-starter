@@ -2,11 +2,11 @@
 
 import { Box } from "lucide-react";
 import Link from "next/link";
+import { SignUpForm } from "@/components/forms/sign-up-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { SignInForm } from "@/components/forms/sign-in-form";
 import { APP_NAME } from "@/lib/constants";
 
-export default function SignInPage() {
+export default function SignUpPage() {
 	return (
 		<div className="flex min-h-screen flex-col items-center justify-center p-4">
 			<Link className="mb-8 flex items-center gap-2" href="/">
@@ -18,19 +18,19 @@ export default function SignInPage() {
 
 			<Card className="w-full max-w-md">
 				<CardHeader className="text-center">
-					<CardTitle className="text-2xl">Welcome back</CardTitle>
-					<CardDescription>Sign in to your account to continue</CardDescription>
+					<CardTitle className="text-2xl">Create an account</CardTitle>
+					<CardDescription>Sign up to get started</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<SignInForm />
+					<SignUpForm />
 					<p className="mt-4 text-center text-muted-foreground text-sm">
-						Don't have an account?{" "}
-						<Link className="font-medium underline hover:text-foreground" href="/sign-up">
-							Sign up
+						Already have an account?{" "}
+						<Link className="font-medium underline hover:text-foreground" href="/sign-in">
+							Sign in
 						</Link>
 					</p>
 					<p className="mt-4 text-center text-muted-foreground text-xs">
-						By signing in, you agree to our{" "}
+						By signing up, you agree to our{" "}
 						<Link className="underline hover:text-foreground" href="/terms">
 							Terms of Service
 						</Link>{" "}

@@ -1,9 +1,7 @@
 import { createClient, type GenericCtx } from "@convex-dev/better-auth";
 import { convex } from "@convex-dev/better-auth/plugins";
-import { checkout, polar, portal } from "@polar-sh/better-auth";
-import { Polar } from "@polar-sh/sdk";
 import { type BetterAuthOptions, betterAuth } from "better-auth/minimal";
-import { admin, organization, username } from "better-auth/plugins";
+import { admin } from "better-auth/plugins";
 import { v } from "convex/values";
 import { components } from "./_generated/api";
 import type { DataModel } from "./_generated/dataModel";
@@ -11,15 +9,7 @@ import { mutation, query } from "./_generated/server";
 import authConfig from "./auth.config";
 import authSchema from "./betterAuth/schema";
 
-// Fallback so Polar portal plugin never sees Invalid URL during Convex push/analyze (env may be unset at bundle time)
 const siteUrl = process.env.BETTER_AUTH_URL;
-const polarToken = process.env.POLAR_ACCESS_TOKEN;
-const polarServer = process.env.POLAR_SERVER;
-
-const polarClient = new Polar({
-	accessToken: polarToken,
-	server: polarServer as "sandbox" | "production",
-});
 
 // Create authComponent first (needed by createAuthOptions)
 export const authComponent = createClient<DataModel, typeof authSchema>(components.betterAuth, {
@@ -32,47 +22,15 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
 	return {
 		baseURL: siteUrl,
 		database: authComponent.adapter(ctx),
-		// Configure simple, non-verified email/password to get started
+		emailAndPassword: {
+			enabled: true,
+		},
 		plugins: [
 			// The Convex plugin is required for Convex compatibility
 			convex({ authConfig }),
 			// Additional Better Auth plugins
 			admin(),
-			organization(),
-			username(),
-			// Polar: checkout + portal (see https://www.better-auth.com/docs/plugins/polar)
-			polar({
-				client: polarClient,
-				createCustomerOnSignUp: true,
-				use: [
-					checkout({
-						products: [
-							{
-								productId: process.env.POLAR_PRODUCT_ID_PRO_MONTHLY ?? "",
-								slug: "pro-monthly",
-							},
-							{
-								productId: process.env.POLAR_PRODUCT_ID_PRO_YEARLY ?? "",
-								slug: "pro-yearly",
-							},
-						],
-						successUrl: `${siteUrl}/subscription?success=1`,
-						returnUrl: `${siteUrl}/subscription`,
-						authenticatedUsersOnly: true,
-					}),
-					portal({
-						returnUrl: `${siteUrl}/subscription`,
-					}),
-				],
-			}),
 		],
-		socialProviders: {
-			google: {
-				clientId: process.env.BETTER_AUTH_GOOGLE_CLIENT_ID ?? "",
-				clientSecret: process.env.BETTER_AUTH_GOOGLE_CLIENT_SECRET ?? "",
-				// disableSignUp: true,
-			},
-		},
 	} satisfies BetterAuthOptions;
 };
 
@@ -111,7 +69,6 @@ export const createUser = mutation({
 		email: v.string(),
 		password: v.string(),
 		role: v.string(),
-		username: v.string(),
 	},
 	handler: async (ctx, args) => {
 		const { auth, headers } = await authComponent.getAuth(createAuth, ctx);
@@ -123,9 +80,6 @@ export const createUser = mutation({
 				email: args.email,
 				password: args.password,
 				role: args.role as "user" | "admin",
-				data: {
-					username: args.username,
-				},
 			},
 		});
 	},
@@ -138,7 +92,6 @@ export const updateUser = mutation({
 		name: v.string(),
 		email: v.string(),
 		role: v.string(),
-		username: v.string(),
 	},
 	handler: async (ctx, args) => {
 		const { auth, headers } = await authComponent.getAuth(createAuth, ctx);
@@ -150,7 +103,6 @@ export const updateUser = mutation({
 					name: args.name,
 					email: args.email,
 					role: args.role,
-					username: args.username,
 				},
 			},
 		});

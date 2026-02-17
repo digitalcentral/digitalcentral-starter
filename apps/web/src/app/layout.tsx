@@ -5,13 +5,14 @@ import { Geist } from "next/font/google";
 import { ConvexClientProvider } from "@/components/providers/convex-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { APP_NAME, APP_DESCRIPTION } from "@/lib/constants";
 
 export const metadata: Metadata = {
 	title: {
-		default: "SeyPayroll - Professional Payroll for Seychelles",
-		template: "%s | SeyPayroll",
+		default: APP_NAME,
+		template: `%s | ${APP_NAME}`,
 	},
-	description: "Automate your payroll with accurate income tax, SPF, and social security calculations for Seychelles businesses.",
+	description: APP_DESCRIPTION,
 	icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 

@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
-import { APP_NAME, FEATURES, HOW_IT_WORKS, PLAN_PRICES } from "@/lib/constants";
+import { APP_NAME, FEATURES, HOW_IT_WORKS } from "@/lib/constants";
 
 const iconMap = {
 	Building2,
@@ -18,10 +18,7 @@ const iconMap = {
 };
 
 export default function HomePage() {
-	const [billingPeriod, setBillingPeriod] = useState<"monthly" | "yearly">("monthly");
 	const { data: session, isPending } = authClient.useSession();
-
-	const price = billingPeriod === "monthly" ? PLAN_PRICES.monthly : PLAN_PRICES.yearly;
 
 	return (
 		<div className="flex min-h-screen flex-col">
@@ -58,7 +55,7 @@ export default function HomePage() {
 									<Link href="/sign-in">Sign In</Link>
 								</Button>
 								<Button asChild>
-									<Link href="/sign-in">Start Free Trial</Link>
+									<Link href="/sign-up">Get Started</Link>
 								</Button>
 							</>
 						)}
@@ -74,16 +71,16 @@ export default function HomePage() {
 						<div className="mx-auto max-w-4xl text-center">
 							<div className="mb-6 inline-flex items-center gap-2 rounded-full border bg-muted/50 px-4 py-1.5 text-sm">
 								<Shield className="size-4 text-primary" />
-								<span>Auth, orgs & subscriptions included</span>
+								<span>Authentication included</span>
 							</div>
 							<h1 className="mb-6 font-bold text-4xl tracking-tight md:text-6xl lg:text-7xl">
 								Build your product on a <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">solid foundation</span>
 							</h1>
-							<p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground md:text-xl">Next.js, Convex, Better Auth, organizations, and subscriptions. Customize the branding and add your features.</p>
+							<p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground md:text-xl">Next.js, Convex, and Better Auth. Customize the branding and add your features.</p>
 							<div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
 								<Button asChild className="w-full sm:w-auto" size="lg">
-									<Link href="/sign-in">
-										Start 7-Day Free Trial
+									<Link href="/sign-up">
+										Get Started
 										<ArrowRight className="ml-2 size-4" />
 									</Link>
 								</Button>
@@ -101,13 +98,7 @@ export default function HomePage() {
 					<div className="container mx-auto px-4">
 						<div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
 							<div className="flex items-center gap-2 text-muted-foreground">
-								<span className="font-medium text-sm">Organizations & teams</span>
-							</div>
-							<div className="flex items-center gap-2 text-muted-foreground">
-								<span className="font-medium text-sm">Subscriptions & trials</span>
-							</div>
-							<div className="flex items-center gap-2 text-muted-foreground">
-								<span className="font-medium text-sm">Google & email auth</span>
+								<span className="font-medium text-sm">Email & password auth</span>
 							</div>
 							<div className="flex items-center gap-2 text-muted-foreground">
 								<span className="font-medium text-sm">Real-time with Convex</span>
@@ -166,40 +157,17 @@ export default function HomePage() {
 					<div className="container mx-auto px-4">
 						<div className="mx-auto mb-16 max-w-2xl text-center">
 							<h2 className="mb-4 font-bold text-3xl tracking-tight md:text-4xl">Simple, transparent pricing</h2>
-							<p className="text-lg text-muted-foreground">One plan with everything included. Start with a free trial.</p>
-						</div>
-
-						<div className="mb-12 flex items-center justify-center gap-4">
-							<button className={`rounded-lg px-4 py-2 font-medium text-sm transition-colors ${billingPeriod === "monthly" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`} onClick={() => setBillingPeriod("monthly")} type="button">
-								Monthly
-							</button>
-							<button className={`rounded-lg px-4 py-2 font-medium text-sm transition-colors ${billingPeriod === "yearly" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`} onClick={() => setBillingPeriod("yearly")} type="button">
-								Yearly
-								<span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-green-700 text-xs dark:bg-green-900 dark:text-green-300">2 months FREE</span>
-							</button>
+							<p className="text-lg text-muted-foreground">One plan with everything included.</p>
 						</div>
 
 						<div className="mx-auto max-w-md">
 							<Card className="relative overflow-hidden border-2 border-primary">
-								<div className="absolute top-0 right-0 rounded-bl-lg bg-primary px-3 py-1 font-medium text-primary-foreground text-xs">7-Day Free Trial</div>
 								<CardHeader className="pt-8 text-center">
-									<CardTitle className="text-2xl">Pro</CardTitle>
+									<CardTitle className="text-2xl">Get Started</CardTitle>
 									<CardDescription>Everything you need to run your product</CardDescription>
 								</CardHeader>
 								<CardContent className="text-center">
-									<div className="mb-6">
-										<span className="font-bold text-5xl">${price}</span>
-										{billingPeriod === "yearly" && <p className="mt-1 text-muted-foreground text-sm">Billed annually</p>}
-									</div>
 									<ul className="mb-8 space-y-3 text-left">
-										<li className="flex items-center gap-2">
-											<span className="text-green-500">✓</span>
-											<span>Unlimited organizations</span>
-										</li>
-										<li className="flex items-center gap-2">
-											<span className="text-green-500">✓</span>
-											<span>Team members & roles</span>
-										</li>
 										<li className="flex items-center gap-2">
 											<span className="text-green-500">✓</span>
 											<span>Real-time data</span>
@@ -208,11 +176,14 @@ export default function HomePage() {
 											<span className="text-green-500">✓</span>
 											<span>Email support</span>
 										</li>
+										<li className="flex items-center gap-2">
+											<span className="text-green-500">✓</span>
+											<span>Modern UI components</span>
+										</li>
 									</ul>
 									<Button asChild className="w-full" size="lg">
-										<Link href="/sign-in">Start Free Trial</Link>
+										<Link href="/sign-up">Get Started</Link>
 									</Button>
-									<p className="mt-3 text-muted-foreground text-sm">No credit card required for trial</p>
 								</CardContent>
 							</Card>
 						</div>
@@ -229,7 +200,7 @@ export default function HomePage() {
 						<div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-3">
 							{[
 								{ quote: "Clear structure and modern stack. We shipped in a week.", author: "Team A", role: "Startup" },
-								{ quote: "Auth and subscriptions out of the box. Huge time saver.", author: "Team B", role: "SaaS" },
+								{ quote: "Authentication out of the box. Huge time saver.", author: "Team B", role: "SaaS" },
 								{ quote: "Easy to extend. We added our domain logic on top.", author: "Team C", role: "Product" },
 							].map((t) => (
 								<Card className="bg-background" key={t.author}>
@@ -260,8 +231,8 @@ export default function HomePage() {
 								Clone the repo, set your env, and start customizing. Add your branding and features in <code className="rounded bg-primary-foreground/20 px-1.5 py-0.5 text-sm">lib/constants.ts</code>.
 							</p>
 							<Button asChild size="lg" variant="secondary">
-								<Link href="/sign-in">
-									Start Your Free Trial
+								<Link href="/sign-up">
+									Get Started
 									<ArrowRight className="ml-2 size-4" />
 								</Link>
 							</Button>

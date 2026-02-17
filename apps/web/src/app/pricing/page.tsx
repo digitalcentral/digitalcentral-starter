@@ -2,18 +2,13 @@
 
 import { ArrowLeft, Box, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
-import { APP_NAME, PLAN_CREDITS, PLAN_PRICES } from "@/lib/constants";
+import { APP_NAME } from "@/lib/constants";
 
 export default function PricingPage() {
-	const [billingPeriod, setBillingPeriod] = useState<"monthly" | "yearly">("monthly");
 	const { data: session } = authClient.useSession();
-
-	const price = billingPeriod === "monthly" ? PLAN_PRICES.monthly : PLAN_PRICES.yearly;
-	const credits = billingPeriod === "monthly" ? PLAN_CREDITS.monthly : PLAN_CREDITS.yearly;
 
 	return (
 		<div className="min-h-screen bg-background">
@@ -36,7 +31,7 @@ export default function PricingPage() {
 									<Link href="/sign-in">Sign In</Link>
 								</Button>
 								<Button asChild>
-									<Link href="/sign-in">Start Free Trial</Link>
+									<Link href="/sign-up">Get Started</Link>
 								</Button>
 							</>
 						)}
@@ -55,52 +50,33 @@ export default function PricingPage() {
 
 					<div className="mx-auto mb-16 max-w-2xl text-center">
 						<h1 className="mb-4 font-bold text-4xl tracking-tight">Simple, transparent pricing</h1>
-						<p className="text-lg text-muted-foreground">One plan with everything included. Start with a 7-day free trial.</p>
-					</div>
-
-					<div className="mb-12 flex items-center justify-center gap-4">
-						<button className={`rounded-lg px-4 py-2 font-medium text-sm transition-colors ${billingPeriod === "monthly" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`} onClick={() => setBillingPeriod("monthly")} type="button">
-							Monthly
-						</button>
-						<button className={`rounded-lg px-4 py-2 font-medium text-sm transition-colors ${billingPeriod === "yearly" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`} onClick={() => setBillingPeriod("yearly")} type="button">
-							Yearly
-						</button>
+						<p className="text-lg text-muted-foreground">One plan with everything included.</p>
 					</div>
 
 					<div className="mx-auto max-w-md">
 						<Card className="relative overflow-hidden border-2 border-primary">
-							<div className="absolute top-0 right-0 rounded-bl-lg bg-primary px-3 py-1 font-medium text-primary-foreground text-xs">7-Day Free Trial</div>
 							<CardHeader className="pt-8 text-center">
 								<CardTitle className="text-2xl">Pro</CardTitle>
-								<CardDescription>{credits} credits per month included</CardDescription>
+								<CardDescription>Everything you need to run your product</CardDescription>
 							</CardHeader>
 							<CardContent className="text-center">
-								<div className="mb-6">
-									<span className="font-bold text-5xl">${price}</span>
-									<span className="text-muted-foreground">{billingPeriod === "monthly" ? "/month" : "/year"}</span>
-								</div>
 								<ul className="mb-8 space-y-3 text-left">
 									<li className="flex items-center gap-2">
 										<CheckCircle2 className="size-5 text-green-500" />
-										<span>{credits} credits per month</span>
+										<span>Real-time data</span>
 									</li>
 									<li className="flex items-center gap-2">
 										<CheckCircle2 className="size-5 text-green-500" />
-										<span>Unlimited organizations</span>
+										<span>Email support</span>
 									</li>
 									<li className="flex items-center gap-2">
 										<CheckCircle2 className="size-5 text-green-500" />
-										<span>Team members & roles</span>
-									</li>
-									<li className="flex items-center gap-2">
-										<CheckCircle2 className="size-5 text-green-500" />
-										<span>Payments via Polar</span>
+										<span>Modern UI components</span>
 									</li>
 								</ul>
 								<Button asChild className="w-full" size="lg">
-									<Link href="/sign-in">Start Free Trial</Link>
+									<Link href="/sign-up">Get Started</Link>
 								</Button>
-								<p className="mt-3 text-muted-foreground text-sm">No credit card required for trial</p>
 							</CardContent>
 						</Card>
 					</div>
@@ -109,16 +85,16 @@ export default function PricingPage() {
 						<h2 className="mb-8 text-center font-bold text-2xl">Frequently asked questions</h2>
 						<div className="space-y-6">
 							<div>
-								<h3 className="mb-2 font-semibold">What happens after my trial ends?</h3>
-								<p className="text-muted-foreground">After your 7-day trial, you can subscribe to continue. Your data is preserved.</p>
+								<h3 className="mb-2 font-semibold">How do I get started?</h3>
+								<p className="text-muted-foreground">Simply sign up with your email and password to create an account and start using the platform.</p>
 							</div>
 							<div>
-								<h3 className="mb-2 font-semibold">How do I pay?</h3>
-								<p className="text-muted-foreground">Checkout is powered by Polar. You’ll be redirected to Polar to pay; your plan updates automatically via webhook.</p>
+								<h3 className="mb-2 font-semibold">What features are included?</h3>
+								<p className="text-muted-foreground">All features are included: authentication, real-time data synchronization, and modern UI components.</p>
 							</div>
 							<div>
-								<h3 className="mb-2 font-semibold">Can I cancel anytime?</h3>
-								<p className="text-muted-foreground">Yes. You keep access until the end of your billing period.</p>
+								<h3 className="mb-2 font-semibold">Can I customize this starter?</h3>
+								<p className="text-muted-foreground">Yes! This is a starter template designed to be customized for your specific product needs.</p>
 							</div>
 						</div>
 					</div>

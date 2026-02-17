@@ -4,54 +4,17 @@
 
 import { env } from "@/env";
 
-// Subscription pricing (USD) — Polar sandbox products
-export const PLAN_PRICES = {
-	monthly: 5,
-	yearly: 50, // Per year (2000 credits/month)
-	credits: 25, // One-time 5000 credits
-} as const;
-
-export const PLAN_CREDITS = {
-	monthly: 1000,
-	yearly: 2000,
-	credits: 5000,
-} as const;
-
-export const PLAN_DESCRIPTIONS = {
-	monthly: "1000 credits/month, billed monthly",
-	yearly: "2000 credits/month, billed annually",
-	credits: "5000 credits one-time add-on",
-} as const;
-
-export type BillingPeriod = "monthly" | "yearly";
-
-// Trial period (days)
-export const TRIAL_DAYS = 7;
-
-// Currency
-export const DEFAULT_CURRENCY = "USD";
-export const PAYMENT_CURRENCY = "USD";
 
 // App branding — change these for your project
 export const APP_NAME = "Starter";
-export const APP_DESCRIPTION = "A starter template for SaaS apps with auth, organizations, and subscriptions";
+export const APP_DESCRIPTION = "A starter template for SaaS apps with authentication";
 export const APP_URL = env.NEXT_PUBLIC_SITE_URL;
 
 // Features list (marketing / landing page)
 export const FEATURES = [
 	{
-		title: "Organizations",
-		description: "Create and manage organizations with team members and roles.",
-		icon: "Building2",
-	},
-	{
-		title: "Subscriptions",
-		description: "Built-in trial, subscription plans, and payment-ready structure.",
-		icon: "CreditCard",
-	},
-	{
 		title: "Authentication",
-		description: "Better Auth with Google and email. Convex-backed sessions.",
+		description: "Better Auth with email and password. Convex-backed sessions.",
 		icon: "Shield",
 	},
 	{
@@ -75,17 +38,17 @@ export const FEATURES = [
 export const HOW_IT_WORKS = [
 	{
 		step: 1,
-		title: "Create Your Organization",
-		description: "Sign up and set up your company or team in minutes.",
+		title: "Sign Up",
+		description: "Create your account with email and password.",
 	},
 	{
 		step: 2,
-		title: "Invite Your Team",
-		description: "Add members and assign roles. Control who sees what.",
+		title: "Start Building",
+		description: "Customize the app for your product and add your features.",
 	},
 	{
 		step: 3,
-		title: "Subscribe & Build",
-		description: "Start a trial, then subscribe. Customize the app for your product.",
+		title: "Deploy",
+		description: "Deploy to production and scale your application.",
 	},
 ] as const;
