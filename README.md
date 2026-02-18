@@ -36,15 +36,8 @@ A **project starter** for building modern SaaS apps with authentication and reac
 
 Follow these phases in order. Each step builds on the previous one. If you use OpenClaw (e.g. in Telegram), there are [copy-paste prompts](#prompts-to-use-with-openclaw) at the bottom for each phase.
 
-```mermaid
-flowchart LR
-  A[Clone starter] --> B[Prepare GitHub clean]
-  B --> C[Scaffold: install + env]
-  C --> D[Convex: project + deploy key + dashboard env]
-  D --> E[Vercel: project + env]
-  E --> F[Deploy Convex + Web]
-  F --> G[Live URL]
-  G --> H[Write plan and requirements]
+```
+Clone starter → Prepare GitHub clean → Scaffold (install + env) → Convex (project + deploy key + dashboard env) → Vercel (project + env) → Deploy → Live URL → Write plan and requirements
 ```
 
 ### Phase 1: Prepare GitHub (clean repo)
