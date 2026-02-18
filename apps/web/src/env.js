@@ -7,7 +7,6 @@ export const env = createEnv({
 	 * isn't built with invalid env vars.
 	 */
 	server: {
-		CONVEX_DEPLOYMENT: z.string().optional(),
 		NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
 	},
 
@@ -27,7 +26,6 @@ export const env = createEnv({
 	 * middlewares) or client-side so we need to destruct manually.
 	 */
 	runtimeEnv: {
-		CONVEX_DEPLOYMENT: process.env.CONVEX_DEPLOYMENT,
 		NEXT_PUBLIC_CONVEX_URL: process.env.NEXT_PUBLIC_CONVEX_URL,
 		NEXT_PUBLIC_CONVEX_SITE_URL: process.env.NEXT_PUBLIC_CONVEX_SITE_URL,
 		NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
